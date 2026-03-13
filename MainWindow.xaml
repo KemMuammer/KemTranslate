@@ -1,0 +1,280 @@
+﻿<Window x:Class="KemTranslate.MainWindow"
+     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+     xmlns:local="clr-namespace:KemTranslate"
+     Title="KemTranslate"
+     Height="640" Width="960"
+     WindowStartupLocation="CenterScreen"
+     Background="{DynamicResource WindowBackground}"
+     Foreground="{DynamicResource ForegroundBrush}"
+     PreviewKeyDown="Window_PreviewKeyDown">
+    <!-- In-app shortcuts -->
+    <Window.InputBindings>
+        <KeyBinding Command="{x:Static local:MainWindow.TranslateCommand}" Modifiers="Control" Key="Return"/>
+        <KeyBinding Command="{x:Static local:MainWindow.SwapCommand}" Modifiers="Control+Shift" Key="S"/>
+        <KeyBinding Command="{x:Static local:MainWindow.ClearCommand}" Modifiers="Control" Key="L"/>
+        <KeyBinding Command="{x:Static local:MainWindow.PasteAndTranslateCommand}" Modifiers="Control+Shift" Key="V"/>
+    </Window.InputBindings>
+
+    <Window.CommandBindings>
+        <CommandBinding Command="{x:Static local:MainWindow.TranslateCommand}" Executed="TranslateCommand_Executed" CanExecute="TranslateCommand_CanExecute"/>
+        <CommandBinding Command="{x:Static local:MainWindow.SwapCommand}" Executed="SwapCommand_Executed" CanExecute="SwapCommand_CanExecute"/>
+        <CommandBinding Command="{x:Static local:MainWindow.ClearCommand}" Executed="ClearCommand_Executed" CanExecute="ClearCommand_CanExecute"/>
+        <CommandBinding Command="{x:Static local:MainWindow.PasteAndTranslateCommand}" Executed="PasteAndTranslateCommand_Executed" CanExecute="PasteAndTranslateCommand_CanExecute"/>
+    </Window.CommandBindings>
+
+    <Border Margin="8"
+            Padding="12"
+            Background="{DynamicResource WindowBackground}"
+            BorderBrush="{DynamicResource FloatingBorderBrush}"
+            BorderThickness="1"
+            CornerRadius="16">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="265*"/>
+                <ColumnDefinition Width="41*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <TabControl x:Name="TabsMain" Grid.Row="0" Grid.ColumnSpan="2">
+                <TabItem Header="Translation">
+                    <Grid Margin="10">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <Grid Grid.Row="0" Margin="0,0,0,10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="12"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="12"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="12"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="12"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Grid.Column="0" VerticalAlignment="Center" Text="Source:" Margin="0,0,6,0" Foreground="{DynamicResource ForegroundBrush}"/>
+                            <ComboBox x:Name="CmbSource" Grid.Column="1" Height="28" MinWidth="160" MaxWidth="320"
+                                      Background="{DynamicResource TextBoxBackground}" Foreground="{DynamicResource TextBoxForeground}"
+                                      ItemContainerStyle="{StaticResource ThemedComboBoxItemStyle}" ItemTemplate="{StaticResource ComboItemTemplate}"
+                                      TextSearch.TextPath="display" SelectionChanged="CmbSource_SelectionChanged" VerticalContentAlignment="Center" Padding="6,2" FontSize="13" FontFamily="Segoe UI"/>
+
+                            <TextBlock Grid.Column="3" VerticalAlignment="Center" Text="Target:" Margin="0,0,6,0" Foreground="{DynamicResource ForegroundBrush}"/>
+                            <ComboBox x:Name="CmbTarget" Grid.Column="4" Height="28" MinWidth="160" MaxWidth="320"
+                                      Background="{DynamicResource TextBoxBackground}" Foreground="{DynamicResource TextBoxForeground}"
+                                      ItemContainerStyle="{StaticResource ThemedComboBoxItemStyle}" ItemTemplate="{StaticResource ComboItemTemplate}"
+                                      TextSearch.TextPath="display" SelectionChanged="CmbTarget_SelectionChanged" VerticalContentAlignment="Center" Padding="6,2" FontSize="13" FontFamily="Segoe UI" HorizontalContentAlignment="Left"/>
+
+                            <Button x:Name="BtnFavoriteTarget" Grid.Column="5" Width="36" Height="28" Margin="8,0,0,0" Padding="0" Content="☆" FontFamily="Segoe UI Symbol" ToolTip="Toggle favorite target language" Click="BtnFavoriteTarget_Click"/>
+                            <Button x:Name="BtnSwap" Grid.Column="7" Content="⇄" Width="44" Height="28" Padding="0" FontFamily="Segoe UI Symbol" FontWeight="Normal" ToolTip="Swap languages" Click="BtnSwap_Click"/>
+                            <Button x:Name="BtnTranslate" Grid.Column="9" Height="28" MinWidth="120" Content="Translate" Click="BtnTranslate_Click"/>
+                            <Button x:Name="BtnOcrCapture" Grid.Column="11" Height="28" MinWidth="96" Content="OCR" ToolTip="Capture a screen region and translate recognized text" Click="BtnOcrCapture_Click"/>
+                        </Grid>
+
+                        <GroupBox Grid.Row="1" Header="Input" Margin="0,0,0,10" Background="{DynamicResource ControlBackground}" Foreground="{DynamicResource ForegroundBrush}">
+                            <Grid>
+                                <TextBox x:Name="TxtInput"
+                                     AcceptsReturn="True"
+                                     VerticalScrollBarVisibility="Auto"
+                                     TextWrapping="Wrap"
+                                     TextChanged="TxtInput_TextChanged"
+                                      FontFamily="Arial"
+                                      FontSize="20"
+                                     Padding="6"/>
+                            </Grid>
+                        </GroupBox>
+
+                        <GroupBox Grid.Row="2" Header="Output" Background="{DynamicResource ControlBackground}" Foreground="{DynamicResource ForegroundBrush}">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+
+                                <TextBox x:Name="TxtOutput"
+                                     Grid.Row="0"
+                                     IsReadOnly="True"
+                                     AcceptsReturn="True"
+                                     VerticalScrollBarVisibility="Auto"
+                                     TextWrapping="Wrap"
+                                      FontFamily="Arial"
+                                      FontSize="20"
+                                     Padding="6"/>
+
+                                <StackPanel Grid.Row="1"
+                                            Orientation="Horizontal"
+                                            HorizontalAlignment="Right"
+                                            Margin="0,10,0,0">
+                                    <ComboBox x:Name="CmbRecentTranslations"
+                                              Width="280"
+                                              Height="32"
+                                              Margin="0,0,8,0"
+                                              Tag="Histroy"
+                                              DisplayMemberPath="DisplayText"
+                                              ToolTip="Recent translations"
+                                              SelectionChanged="CmbRecentTranslations_SelectionChanged" />
+                                    <Button Width="110"
+                                            Height="32"
+                                            Margin="0,0,8,0"
+                                            Content="Save"
+                                            Click="BtnSaveOutput_Click" />
+                                    <Button Width="110"
+                                            Height="32"
+                                            Content="Copy"
+                                            Click="BtnCopyOutput_Click" />
+                                </StackPanel>
+                            </Grid>
+                        </GroupBox>
+                    </Grid>
+                </TabItem>
+
+                <TabItem Header="Write">
+                    <Grid Margin="10">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <Grid Grid.Row="0" Margin="0,0,0,10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <Button x:Name="BtnWrite" Grid.Column="0" Height="28" MinWidth="120" Margin="0,0,10,0" Content="Write" Click="BtnWrite_Click"/>
+
+                            <TextBlock Grid.Column="1" VerticalAlignment="Center" Foreground="{DynamicResource TextSecondaryBrush}" Text="LanguageTool grammar and style check" />
+                        </Grid>
+
+                        <GroupBox Grid.Row="1" Header="Input" Margin="0,0,0,10" Background="{DynamicResource ControlBackground}" Foreground="{DynamicResource ForegroundBrush}">
+                            <Grid>
+                                <TextBox x:Name="TxtWriteInput"
+                                         AcceptsReturn="True"
+                                         VerticalScrollBarVisibility="Auto"
+                                         TextWrapping="Wrap"
+                                         TextChanged="TxtWriteInput_TextChanged"
+                                         FontFamily="Arial"
+                                         FontSize="20"
+                                         Padding="6"/>
+                            </Grid>
+                        </GroupBox>
+
+                        <GroupBox Grid.Row="2" Header="Output" Background="{DynamicResource ControlBackground}" Foreground="{DynamicResource ForegroundBrush}">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+
+                                <RichTextBox x:Name="TxtWriteOutput"
+                                             Grid.Row="0"
+                                             TextChanged="TxtWriteOutput_TextChanged"
+                                             PreviewMouseMove="TxtWriteOutput_PreviewMouseMove"
+                                             MouseLeave="TxtWriteOutput_MouseLeave"
+                                             PreviewMouseLeftButtonDown="TxtWriteOutput_PreviewMouseLeftButtonDown"
+                                             VerticalScrollBarVisibility="Auto"
+                                             FontFamily="Arial"
+                                             FontSize="20"
+                                             Background="{DynamicResource TextBoxBackground}"
+                                             Foreground="{DynamicResource TextBoxForeground}"
+                                             BorderBrush="{DynamicResource ControlBackground}"
+                                             BorderThickness="1"
+                                             Padding="6" />
+
+                                <Popup x:Name="WriteSentencePopup"
+                                       Grid.Row="0"
+                                       PlacementTarget="{Binding ElementName=TxtWriteOutput}"
+                                       Placement="Relative"
+                                       StaysOpen="True"
+                                       AllowsTransparency="True">
+                                    <Border Background="{DynamicResource ButtonBackground}"
+                                            BorderBrush="{DynamicResource FloatingBorderBrush}"
+                                            BorderThickness="1"
+                                            CornerRadius="6"
+                                            Padding="0">
+                                        <StackPanel Orientation="Horizontal">
+                                            <Button Width="160"
+                                                    Height="32"
+                                                    Content="Rewrite the sentence"
+                                                    Click="BtnRewriteHoveredSentence_Click" />
+                                            <Button Width="32"
+                                                    Height="32"
+                                                    Padding="0"
+                                                    FontFamily="Segoe UI Symbol"
+                                                    FontSize="14"
+                                                    Content="✕"
+                                                    Click="BtnCloseWriteSentencePopup_Click" />
+                                        </StackPanel>
+                                    </Border>
+                                </Popup>
+
+                                <StackPanel Grid.Row="1"
+                                            Orientation="Horizontal"
+                                            HorizontalAlignment="Right"
+                                            Margin="0,10,0,0">
+                                    <ComboBox x:Name="CmbRecentWrites"
+                                            Width="260"
+                                            Height="32"
+                                            Margin="0,0,8,0"
+                                            Tag="Histroy"
+                                            DisplayMemberPath="DisplayText"
+                                            ToolTip="Recent writing results"
+                                            SelectionChanged="CmbRecentWrites_SelectionChanged" />
+                                    <Button x:Name="BtnRewriteWriteOutput"
+                                            Width="160"
+                                            Height="32"
+                                            Margin="0,0,8,0"
+                                            Content="Rewrite the sentence"
+                                            Click="BtnRewriteWriteOutput_Click" />
+                                    <Button Width="110"
+                                            Height="32"
+                                            Margin="0,0,8,0"
+                                            Content="Save"
+                                            Click="BtnSaveWriteOutput_Click" />
+                                    <Button Width="110"
+                                            Height="32"
+                                            HorizontalAlignment="Right"
+                                            Content="Copy"
+                                            Click="BtnCopyWriteOutput_Click" />
+                                </StackPanel>
+                            </Grid>
+                        </GroupBox>
+                    </Grid>
+                </TabItem>
+            </TabControl>
+
+            <Button Grid.Row="0"
+                    Panel.ZIndex="1"
+                    Width="32"
+                    Height="28"
+                    Margin="0,0,8,0"
+                    Padding="0"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Top"
+                    Content="⚙"
+                    FontFamily="Segoe UI Symbol"
+                    FontSize="15"
+                    FontWeight="Normal"
+                    ToolTip="Settings"
+                    Click="BtnSettings_Click" Grid.Column="1"/>
+
+            <StatusBar Grid.ColumnSpan="2" Margin="0,560,0,0" Grid.RowSpan="2">
+                <StatusBarItem>
+                    <TextBlock x:Name="TxtStatus" Text="Ready" Foreground="{DynamicResource TextSecondaryBrush}"/>
+                </StatusBarItem>
+            </StatusBar>
+        </Grid>
+    </Border>
+</Window>

@@ -1,0 +1,37 @@
+# Build output
+bin/
+obj/
+publish/
+
+# Visual Studio
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Test and coverage
+TestResults/
+*.coverage
+*.coveragexml
+
+# Logs and local app files
+logs/
+kemsettings.json
+
+# Rider / VS Code
+.idea/
+.vscode/
+
+# Windows
+Thumbs.db
+Desktop.ini
+
+# NuGet
+*.nupkg
+packages/
+
+# Generated files
+*.g.cs
+*.g.i.cs
+*.cache

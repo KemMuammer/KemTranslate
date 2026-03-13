@@ -1,0 +1,34 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<OutputType>WinExe</OutputType>
+		<TargetFramework>net10.0-windows</TargetFramework>
+		<UseWPF>true</UseWPF>
+     <UseWindowsForms>true</UseWindowsForms>
+		<Nullable>enable</Nullable>
+     <ImplicitUsings>false</ImplicitUsings>
+		<ApplicationIcon>Assets\kemtranslate.ico</ApplicationIcon>
+		<AssemblyName>KemTranslate</AssemblyName>
+		<RootNamespace>KemTranslate</RootNamespace>
+	</PropertyGroup>
+	<ItemGroup>
+	  <None Include=".github\workflows\build.yml" />
+	  <None Include="KemTranslate.Tests\KemTranslate.Tests.csproj" />
+	</ItemGroup>
+    <ItemGroup>
+	  <Compile Remove="KemTranslate.Tests/**/*.cs" />
+	  <EmbeddedResource Remove="KemTranslate.Tests/**" />
+	  <None Remove="KemTranslate.Tests/**" />
+	</ItemGroup>
+ <ItemGroup>
+	  <Content Include="ocr\**\*">
+		<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </Content>
+	</ItemGroup>
+	<ItemGroup>
+      <Compile Remove="KemTranslate.Tests\**\*.cs" />
+		<Resource Include="Assets\kemtranslate.png" />
+     <Resource Include="Assets\kemtranslate.ico" />
+		<!-- Optional: show the logo at app startup -->
+		<!-- <SplashScreen Include="Assets\kemtranslate.png" /> -->
+	</ItemGroup>
+</Project>
