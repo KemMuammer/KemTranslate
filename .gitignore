@@ -9,6 +9,7 @@ publish/
 *.suo
 *.userosscache
 *.sln.docstates
+Properties/PublishProfiles/
 
 # Test and coverage
 TestResults/
