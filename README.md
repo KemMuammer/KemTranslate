@@ -1,6 +1,6 @@
 # KemTranslate
 
-`KemTranslate` is a Windows desktop translator and writing assistant built with WPF on `.NET 10`.
+`KemTranslate` is a Windows desktop translation, OCR, and writing assistant built with WPF on `.NET 10`.
 
 It combines translation, writing assistance, OCR capture, tray integration, and startup options in a single desktop application.
 
