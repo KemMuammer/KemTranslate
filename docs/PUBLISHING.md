@@ -1,6 +1,6 @@
 # Publishing KemTranslate to GitHub
 
-This guide shows how to prepare the repository, push it to GitHub, and create a Windows release build from PowerShell.
+This guide explains how to prepare the repository, push it to GitHub, and create a Windows release build from PowerShell.
 
 ## 1. Verify the project locally
 
@@ -11,7 +11,7 @@ dotnet build .\KemTranslate.csproj -c Release
 dotnet run --project .\KemTranslate.Tests\KemTranslate.Tests.csproj
 ```
 
-## 2. Initialize git if needed
+## 2. Initialize Git if needed
 
 ```powershell
 git init
@@ -39,13 +39,13 @@ Example self-contained single-file publish:
 dotnet publish .\KemTranslate.csproj -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -o .\publish\win-x64
 ```
 
-Published files will be written to:
+Published files are written to:
 
 - `publish\win-x64`
 
 ## 5. Test the published build
 
-Before creating a GitHub release, verify:
+Before creating a GitHub release, verify that:
 
 - the application starts correctly
 - tray behavior works as expected
@@ -57,14 +57,14 @@ Before creating a GitHub release, verify:
 
 On GitHub:
 
-1. open the repository
-2. go to `Releases`
-3. choose `Draft a new release`
-4. create a tag such as `v1.0.0`
-5. attach a zip of `publish\win-x64`
-6. publish the release
+1. Open the repository.
+2. Go to `Releases`.
+3. Choose `Draft a new release`.
+4. Create a tag such as `v1.0.0`.
+5. Attach a ZIP archive of `publish\win-x64`.
+6. Publish the release.
 
-## 7. Optional zip step
+## 7. Optional ZIP step
 
 ```powershell
 Compress-Archive -Path .\publish\win-x64\* -DestinationPath .\publish\KemTranslate-win-x64.zip -Force
@@ -81,8 +81,8 @@ gh release create v1.0.0 .\publish\KemTranslate-win-x64.zip --title "v1.0.0" --n
 
 ## Notes
 
-- `kemsettings.json` is ignored by git on purpose
-- if you bundle Tesseract in `ocr/`, include its required notices
-- avoid committing personal server URLs, API keys, or machine-specific settings
-- this repository includes an MIT `LICENSE`
-- if you distribute bundled OCR binaries, include the upstream notices described in `THIRD-PARTY-NOTICES.md`
+- `kemsettings.json` is ignored by Git on purpose.
+- If you bundle Tesseract in `ocr/`, include its required notices.
+- Avoid committing personal server URLs, API keys, or machine-specific settings.
+- This repository includes an MIT `LICENSE` file.
+- If you distribute bundled OCR binaries, include the upstream notices described in `THIRD-PARTY-NOTICES.md`.
